@@ -6,7 +6,7 @@
                 value=""
             >Please select one</option>
             <option
-                v-for="(            currency, index            ) in getCurrencyList()"
+                v-for="( currency, index ) in getCurrencyList()"
                 :key="index"
             >
                 {{ index }}
