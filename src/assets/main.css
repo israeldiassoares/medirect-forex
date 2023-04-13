@@ -1,4 +1,5 @@
 @import './base.css';
+@import '../../node_modules/currency-flags/dist/currency-flags.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
