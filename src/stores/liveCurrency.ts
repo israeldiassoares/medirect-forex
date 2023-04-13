@@ -8,7 +8,93 @@ export const useLiveCurrency = defineStore('liveCurrency', {
         liveCurrencyList: {} as LiveCurrencyList,
         selectedBaseCurrency: '' as string,
         selectedQuoteCurrency: '' as string,
-        liveCurrency: {} as LiveCurrency
+        liveCurrency: {} as LiveCurrency,
+        liveCurrencyMock: {
+            "endpoint": "live",
+            "quotes": [
+                {
+                    "ask": 0.1845672,
+                    "base_currency": "BRL",
+                    "bid": 0.1845672,
+                    "mid": 0.1845672,
+                    "quote_currency": "EUR"
+                }
+            ],
+            "requested_time": "Thu, 13 Apr 2023 11:38:40 GMT",
+            "timestamp": 1681385921
+        },
+        liveCurrencyListMock: {
+            "available_currencies": {
+                "AED": "UAE Dirham",
+                "ALL": "Albanian Lek",
+                "AOA": "Angolan Kwanza",
+                "ARS": "Argentine Peso",
+                "AUD": "Australian Dollar",
+                "BDT": "Bangladeshi Taka",
+                "BGN": "Bulgaria Lev",
+                "BHD": "Bahraini Dinar",
+                "BRL": "Brazilian Real",
+                "CAD": "Canadian Dollar",
+                "CHF": "Swiss Franc",
+                "CLP": "Chilean Peso",
+                "CNH": "Chinese Yuan offshore",
+                "CNY": "Chinese Yuan onshore",
+                "COP": "Colombian Peso",
+                "CZK": "Czech Koruna",
+                "DKK": "Danish Krone",
+                "EGP": "Egyptian Pound",
+                "EUR": "Euro",
+                "GBP": "British Pound Sterling",
+                "GHS": "Ghanaian Cedi",
+                "HKD": "Hong Kong Dollar",
+                "HRK": "Croatian Kuna",
+                "HUF": "Hungarian Forint",
+                "IDR": "Indonesian Rupiah",
+                "ILS": "Israeli New Sheqel",
+                "INR": "Indian Rupee",
+                "ISK": "Icelandic Krona",
+                "JOD": "Jordanian Dinar",
+                "JPY": "Japanese Yen",
+                "KES": "Kenyan Shillings",
+                "KRW": "South Korean Won",
+                "KWD": "Kuwaiti Dinar",
+                "LBP": "Lebanese Pound",
+                "LKR": "Sri Lankan Rupee",
+                "MAD": "Moroccan Dirham",
+                "MUR": "Mauritian Rupee",
+                "MXN": "Mexican Peso",
+                "MYR": "Malaysian Ringgit",
+                "NGN": "Nigerean Naira",
+                "NOK": "Norwegian Krone",
+                "NZD": "New Zealand Dollar",
+                "OMR": "Omani Rial",
+                "PEN": "Peruvian Nuevo Sol",
+                "PHP": "Philippine Peso",
+                "PKR": "Pakistani Rupee",
+                "PLN": "Polish Zloty",
+                "QAR": "Qatari Rial",
+                "RON": "Romanian Leu",
+                "RUB": "Russian Ruble",
+                "SAR": "Saudi Arabian Riyal",
+                "SEK": "Swedish Krona",
+                "SGD": "Singapore Dollar",
+                "THB": "Thai Baht",
+                "TND": "Tunisian Dinar",
+                "TRY": "Turkish Lira",
+                "TWD": "Taiwanese Dollar",
+                "USD": "US Dollar",
+                "VND": "Vietnamese Dong",
+                "XAF": "Central African Francs",
+                "XAG": "Silver (troy ounce)",
+                "XAU": "Gold (troy ounce)",
+                "XOF": "West African CFA franc",
+                "XPD": "Palladium",
+                "XPT": "Platinum",
+                "ZAR": "South African Rand",
+                "ZWL": "Zimbabwean Dollar"
+            },
+            "endpoint": "live_currencies"
+        }
     }),
     actions: {
         async fetchListCurrency() {
@@ -20,9 +106,10 @@ export const useLiveCurrency = defineStore('liveCurrency', {
             }
         },
         setSelectedBaseCurrency(symbol: string) {
+            console.log('oq vem', symbol)
             this.selectedBaseCurrency = symbol
         },
-        setSelectedComparedCurrency(symbol: string) {
+        setSelectedQuoteCurrency(symbol: string) {
             this.selectedQuoteCurrency = symbol
         },
         async fetchLiveCurrency() {
@@ -31,12 +118,13 @@ export const useLiveCurrency = defineStore('liveCurrency', {
     },
     getters: {
         getStateCurrencyList(state) {
+            console.log('ose', state.liveCurrencyList.available_currencies)
             return state.liveCurrencyList.available_currencies
         },
         getSelectedBaseCurrency(state) {
             return state.selectedBaseCurrency
         },
-        getSelectedComparedCurrency(state) {
+        getSelectedQuoteCurrency(state) {
             return state.selectedQuoteCurrency
         },
         getLiveCurrency(state) {

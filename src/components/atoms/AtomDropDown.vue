@@ -6,22 +6,26 @@
                 value=""
             >Please select one</option>
             <option
-                v-for="( currency, index ) in getCurrencyList()"
+                v-for="(     currency, index        ) in getCurrencyList()"
                 :key="index"
+                :id="index"
             >
                 {{ index }}
             </option>
         </select>
-        currency {{ currencySelected }}
+        <slot name="flag"></slot>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useLiveCurrency } from '@/stores/liveCurrency'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 const store = useLiveCurrency()
 function getCurrencyList() {
     return store.getStateCurrencyList
 }
+onMounted(() => {
+    getCurrencyList()
+})
 const currencySelected = ref('')
 </script>

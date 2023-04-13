@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "chart.js": "^4.2.1",
+    "currency-flags": "^4.0.7",
     "pinia": "^2.0.32",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
