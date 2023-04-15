@@ -11,18 +11,18 @@
                 <section class="flags">
                     <div
                         class="currency-flag rounded-full"
-                        :class="`currency-flag-${store.getSelectedBaseCurrency.toLocaleLowerCase()}`"
+                        :class="`currency-flag-${userActionsStore.getSelectedBaseCurrency.toLocaleLowerCase()}`"
                     >
                     </div>
                     <div
                         class="currency-flag rounded-full"
-                        :class="`currency-flag-${store.getSelectedQuoteCurrency.toLocaleLowerCase()}`"
+                        :class="`currency-flag-${userActionsStore.getSelectedQuoteCurrency.toLocaleLowerCase()}`"
                     >
                     </div>
                 </section>
                 <section class="exchange">
                     <div class="symbol">
-                        <p class="font-bold">{{ store.getSelectedBaseCurrency }}/{{ store.getSelectedQuoteCurrency }}</p>
+                        <p class="font-bold">{{ userActionsStore.getSelectedBaseCurrency }}/{{ userActionsStore.getSelectedQuoteCurrency }}</p>
                     </div>
                     <div class="quote-currency ">
                         <p class="font-bold">Current price</p>
@@ -39,8 +39,9 @@
 import { ExchangePrice } from '@/ExchangePrice'
 import { onMounted } from 'vue'
 import { useLiveCurrency } from '@/stores/liveCurrency'
+import { useUserActions } from '@/stores/userActions'
 const store = useLiveCurrency()
-
+const userActionsStore = useUserActions()
 
 onMounted(() => {
     ExchangePrice()

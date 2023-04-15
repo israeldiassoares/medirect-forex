@@ -15,7 +15,7 @@ export function createClosePriceChart() {
                     barThickness: 16,
                     maxBarThickness: 100,
                     minBarLength: 100,
-                    label: "Historical close prices" + store.getCurrencyPair,
+                    label: `Historical close prices ${store.getCurrencyPair}`,
                     data: store.getHistoricalQuotes,
                     borderWidth: 1
                 }

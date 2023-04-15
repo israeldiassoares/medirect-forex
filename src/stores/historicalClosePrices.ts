@@ -3,7 +3,7 @@
  */
 
 import { defineStore } from 'pinia'
-import {calculateDaysAgo} from "@/utils/convertDate"
+import { calculateDaysAgo } from "@/utils/convertDate"
 // import { useLiveCurrency } from '@/stores/liveCurrency'
 // const liveCurrency = useLiveCurrency()
 const API_KEY = import.meta.env.APIEXCHANGEKEY
@@ -18,8 +18,8 @@ export const useHistoricalClosePrices = defineStore('historical-close-prices', {
         currencyPair: '' as string
     }),
     actions: {
-        async fetchTimeSeries(mock = false) {
-            if (mock) {
+        async fetchTimeSeries(isMock = false) {
+            if (isMock) {
                 this.historicalPriceList = await fetch(`/src/data/timeseries.json`).then(response => response.json())
                 this.setCurrencyPair()
                 return
