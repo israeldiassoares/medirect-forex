@@ -36,8 +36,8 @@
 </template>
 
 <script setup lang="ts">
-import { ExchangePrice } from '@/ExchangePrice'
-import { onMounted } from 'vue'
+import { ExchangePrice, UpdateChartExchangePrice } from '@/ExchangePrice'
+import { onMounted, onUpdated } from 'vue'
 import { useLiveCurrency } from '@/stores/liveCurrency'
 import { useUserActions } from '@/stores/userActions'
 const store = useLiveCurrency()
@@ -45,5 +45,8 @@ const userActionsStore = useUserActions()
 
 onMounted(() => {
     ExchangePrice()
+})
+onUpdated(() => {
+    UpdateChartExchangePrice()
 })
 </script>

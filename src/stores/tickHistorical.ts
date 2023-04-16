@@ -1,6 +1,3 @@
-// 20230415173328
-// https://marketdata.tradermade.com//api/v1/tick_historical_sample/GBPUSD/2023-04-12%2008:30/2023-04-12%2009:00?format=json&api_key=WUDjYatxGAYWpomaK1p1
-
 import { defineStore } from 'pinia'
 import { useLiveCurrency } from '@/stores/liveCurrency'
 
@@ -8,8 +5,6 @@ const API_KEY = import.meta.env.APIEXCHANGEKEY
 const endpoint = 'tick_historical'
 const initialDate = new Date() //YYYY-MM-DD
 const endDate = '2023-04-13'
-const liveCurrency = useLiveCurrency()
-const curencyPair = liveCurrency.getCurrencyPair
 
 export const useTickHistorical = defineStore('tick-historical', {
     state: () => ({
@@ -20,21 +15,30 @@ export const useTickHistorical = defineStore('tick-historical', {
         async fetchTickHistorical(isMock = false) {
             if (isMock) {
                 this.tickHistorical = await fetch(`/src/data/tick_historical_sample.json`).then(response => response.json())
+                debugger
                 return
             }
             this.tickHistorical = await fetch(`/api/${endpoint}?start_date =${initialDate}&end_date=${endDate}&currency=${curencyPair}&api_key=${API_KEY}`).then(response => response.json())
         },
     },
     getters: {
+        getTickHistorical(state) {
+            return state.tickHistorical
+        },
         getHistoricalQuotes(state) {
             console.log(state.tickHistorical)
-            return state.tickHistorical.quotes.map(quotePrice => console.log(quotePrice.ask))
+            return state.tickHistorical.quotes.map(quotePrice => quotePrice.ask)
         },
         getHistoricalDate(state) {
             return state.tickHistorical.quotes.map(quoteDate => quoteDate.time)
         },
         getCurrencyPair(state) {
             return state.tickHistorical.quotes.find(quoteDate => quoteDate.inst)
+        },
+        getUserCurrencyPair() {
+            const liveCurrency = useLiveCurrency()
+            const curencyPair = liveCurrency.getCurrencyPair
+            return curencyPair
         }
     }
 })
