@@ -16,8 +16,7 @@ export const useHistoricalClosePrices = defineStore('historical-close-prices', {
     actions: {
         async fetchLast30Days(isMock = false) {
             const initialDate = calculateDaysAgo(new Date(), 30)
-            debugger
-            const endDate = formatDate('yyyy-mm-dd') 
+            const endDate = formatDate('yyyy-mm-dd')
             if (isMock) {
                 return this.historicalPriceList = await fetch(`/src/data/timeseries.json`).then(response => response.json())
             }

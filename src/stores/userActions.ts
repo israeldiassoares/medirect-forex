@@ -21,7 +21,8 @@ export const useUserActions = defineStore('user-actions', {
             return state.selectedQuoteCurrency
         },
         getCurrencyPair(state) {
-            return `${state.selectedBaseCurrency}${state.selectedQuoteCurrency}`
+            if ((state.selectedBaseCurrency != undefined && state.selectedBaseCurrency != "") && (state.selectedQuoteCurrency != undefined && state.selectedQuoteCurrency != ""))
+                return `${state.selectedBaseCurrency}${state.selectedQuoteCurrency}`
         }
 
     }

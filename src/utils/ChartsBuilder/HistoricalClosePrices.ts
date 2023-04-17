@@ -34,6 +34,9 @@ export function createClosePriceChart() {
                         }
                     },
                 },
+                x: {
+                    display: false
+                }
             },
             plugins: {
                 legend: {
@@ -48,4 +51,5 @@ export function createClosePriceChart() {
         context,
         config
     )
+
 }

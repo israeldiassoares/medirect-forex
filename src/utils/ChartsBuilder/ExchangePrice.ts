@@ -5,8 +5,9 @@ import { useTickHistorical } from '../../stores/tickHistorical'
 export class ExchangePrice {
     liveCurrencyStore = useLiveCurrency()
     tickHistorical = useTickHistorical()
-    data = this.tickHistorical.getTickHistorical.quotes
-    dados = this.FlatNumber(this.data)
+    data = this?.tickHistorical?.getTickHistorical.quotes
+    dados = this.data //this.FlatNumber(this.data)
+
     context = document.getElementById('forex-chart') as HTMLCanvasElement
     config: ChartConfiguration = {
         type: 'line',
@@ -36,17 +37,17 @@ export class ExchangePrice {
             }
         }
     }
-    private FlatNumber(data: any[], time: number = 3) {
-        const dados = [] as any[]
-        dados.push(data[ 0 ])
-        data.forEach((valor) => {
-            const minute = valor.time - dados[ dados.length - 1 ].time
-            if ((new Date(minute)).getMinutes() >= time) {
-                dados.push(valor)
-            }
-        })
-        return dados
-    }
+    // private FlatNumber(data: any[], time: number = 3) {
+    //     const dados = [] as any[]
+    //     dados.push(data[ 0 ])
+    //     data.forEach((valor) => {
+    //         const minute = valor.time - dados[ dados.length - 1 ].time
+    //         if ((new Date(minute)).getMinutes() >= time) {
+    //             dados.push(valor)
+    //         }
+    //     })
+    //     return dados
+    // }
 
     createChart() {
         return new Chart(
