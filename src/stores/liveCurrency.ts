@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import { useUserActions } from './userActions'
-const api_key = 'WUDjYatxGAYWpomaK1p1'
-const liveCurrenciesList = 'live_currencies_list?api_key'
+
+const API_KEY = import.meta.env.VITE_API_EXCHANGE_KEY
+
+const liveCurrenciesList = 'live_currencies_list'
 const liveCurrency = 'live?currency'
 export const useLiveCurrency = defineStore('liveCurrency', {
 
@@ -13,6 +15,7 @@ export const useLiveCurrency = defineStore('liveCurrency', {
         liveCurrency: {} as LiveCurrency
     }),
     actions: {
+        /*List of currency*/
         async fetchListCurrency(isMock = false) {
             if (isMock) {
                 try {
@@ -22,10 +25,10 @@ export const useLiveCurrency = defineStore('liveCurrency', {
                 }
             } else {
                 try {
-                    this.liveCurrencyList = await fetch(`/api/${liveCurrenciesList}=${api_key}`)
+                    this.liveCurrencyList = await fetch(`/api/${liveCurrenciesList}?api_key=${API_KEY}`)
                         .then(response => response.json())
                 } catch (error) {
-                    console.log('errrou', error)
+                    console.error('errrou', error)
                 }
             }
         },
@@ -34,11 +37,8 @@ export const useLiveCurrency = defineStore('liveCurrency', {
             if (isMock) {
                 this.liveCurrency = await fetch(`/src/data/live.json`).then(response => response.json())
             } else {
-                this.liveCurrency = await fetch(`/api/${liveCurrency}=${this.currencyPair}&api_key=${api_key}`).then(response => response.json())
+                this.liveCurrency = await fetch(`/api/${liveCurrency}=${this.getCurrencyPair}&api_key=${API_KEY}`).then(response => response.json())
             }
-        },
-        setCurrencyPair() {
-            this.currencyPair = this.userActionsStore.getSelectedBaseCurrency + this.userActionsStore.getSelectedQuoteCurrency
         }
     },
     getters: {
@@ -50,10 +50,12 @@ export const useLiveCurrency = defineStore('liveCurrency', {
             return state.liveCurrencyList.available_currencies
         },
         getLiveCurrency(state) {
-            return state.liveCurrency.quotes
+            if (state?.liveCurrency.quotes != null)
+
+                return state?.liveCurrency.quotes[ state.liveCurrency.quotes.length - 1 ]
         },
-        getCurrencyPair(state) {
-            return state.currencyPair
+        getCurrencyPair() {
+            return useUserActions().getCurrencyPair
         }
     }
 })

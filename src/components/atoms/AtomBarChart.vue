@@ -7,8 +7,9 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { createClosePriceChart } from "@/HistoricalClosePrices"
+import { createClosePriceChart } from "@/utils/ChartsBuilder/HistoricalClosePrices.js"
 onMounted(() => {
     createClosePriceChart()
 })
+
 </script>

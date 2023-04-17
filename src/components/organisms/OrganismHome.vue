@@ -19,7 +19,7 @@
 
             </DropDownSelect>
             <!-- TODO Pass fetchLiveCurrency call to computed when both Base|Quote is fill -->
-            <DropDownSelect @change="[ userActionsStore.setSelectedQuoteCurrency($event.target.value), store.fetchLiveCurrency(true) ]">
+            <DropDownSelect @change="[ userActionsStore.setSelectedQuoteCurrency($event.target.value), store.fetchLiveCurrency() ]">
                 <template v-slot:flag>
 
                     <div
@@ -66,14 +66,20 @@ const AtomLineChart = defineAsyncComponent({
 const AtomBarChart = defineAsyncComponent({
     loader: () => import("@/components/atoms/AtomBarChart.vue")
 })
-const plotCharts = computed(() => {
-    return userActionsStore.getSelectedQuoteCurrency.length > 0 ? true : false
-})
 
-onMounted(() => {
-    historicalPrices.fetchTimeSeries(true)
-    store.fetchListCurrency(true)
-    tickHistorical.fetchTickHistorical(true)
+const plotCharts = computed(() => {
+    return (userActionsStore.getSelectedBaseCurrency.trim().length > 0 &&
+        userActionsStore.getSelectedQuoteCurrency.trim().length > 0) ? true : false
+
 })
+const canFetch = async function canfetchLast30Days() {
+    return plotCharts.value ? [ await historicalPrices.fetchLast30Days(), tickHistorical.fetch15Minutes() ] : ''
+}
+onUpdated(() => {
+    canFetch()
+})
+store.fetchListCurrency(true)
+
+
 
 </script>

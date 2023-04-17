@@ -19,6 +19,9 @@ export const useUserActions = defineStore('user-actions', {
         },
         getSelectedQuoteCurrency(state) {
             return state.selectedQuoteCurrency
+        },
+        getCurrencyPair(state) {
+            return `${state.selectedBaseCurrency}${state.selectedQuoteCurrency}`
         }
 
     }
