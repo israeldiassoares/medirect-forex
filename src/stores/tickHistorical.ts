@@ -1,25 +1,52 @@
 import { defineStore } from 'pinia'
-import { useLiveCurrency } from '@/stores/liveCurrency'
+import { calculateDaysAgo, formatDate, getHourMinuteAgo, getHourMinuteNow } from "@/utils/convertDate"
+import { useUserActions } from './userActions'
 
-const API_KEY = import.meta.env.APIEXCHANGEKEY
-const endpoint = 'tick_historical'
-const initialDate = new Date() //YYYY-MM-DD
-const endDate = '2023-04-13'
-
+const API_KEY = import.meta.env.VITE_API_EXCHANGE_KEY
+const endpoint = 'timeseries'
+//TODO validation if is weekend
 export const useTickHistorical = defineStore('tick-historical', {
     state: () => ({
-        tickHistorical: {} as TimeSeriesResponse,
-        currencyPair: '' as string
+        last15minutes: {} as TimeSeriesResponse,
+        hourlyHistorical: {} as TimeSeriesResponse,
+        dailyHistorical: {} as TimeSeriesResponse,
+        weekHistorical: {} as TimeSeriesResponse,
+        monthHistorical: {} as TimeSeriesResponse
     }),
     actions: {
-        async fetchTickHistorical(isMock = false) {
+        async fetch15Minutes(isMock = false) {
+            const initialDate = `${formatDate('yyyy-mm-dd')}-${getHourMinuteAgo()}` //YYYY-MM-DD
+            const endDate = `${formatDate('yyyy-mm-dd')}-${getHourMinuteNow()}`
             if (isMock) {
                 this.tickHistorical = await fetch(`/src/data/tick_historical_sample.json`).then(response => response.json())
-                debugger
                 return
             }
-            this.tickHistorical = await fetch(`/api/${endpoint}?start_date =${initialDate}&end_date=${endDate}&currency=${curencyPair}&api_key=${API_KEY}`).then(response => response.json())
+            this.last15minutes = await fetch(`/api/${endpoint}?currency=${this.getCurrencyPair}&api_key=${API_KEY}&start_date=${initialDate}&end_date=${endDate}&format=records&interval=minute&period=1`).then(response => response.json())
         },
+        async fetch1Hour() {
+            const initialDate = `${formatDate('yyyy-mm-dd')}-${getHourMinuteAgo(60)}`
+            const endDate = `${formatDate('yyyy-mm-dd')}-${getHourMinuteNow()}`
+            this.hourlyHistorical = await fetch(`/api/${endpoint}?currency=${this.getCurrencyPair}&api_key=${API_KEY}&start_date=${initialDate}&end_date=${endDate}&format=records&interval=minute&period=5`).then(response => response.json())
+        },
+        async fetch1Day() {
+            const initialDate = `${calculateDaysAgo(new Date(), 1)}-${getHourMinuteNow()}`
+            const endDate = `${formatDate('yyyy-mm-dd')}-${getHourMinuteNow()}`
+            this.dailyHistorical = await fetch(`/api/${endpoint}?currency=${this.getCurrencyPair}&api_key=${API_KEY}&start_date=${initialDate}&end_date=${endDate}&format=records&interval=hourly`).then(response => response.json())
+        },
+        async fetch1Week() {
+            const initialDate = `${calculateDaysAgo(new Date(), 7)}` //YYYY-MM-DD
+            const endDate = `${formatDate('yyyy-mm-dd')}`
+
+            this.weekHistorical = await fetch(`/api/${endpoint}?currency=${this.getCurrencyPair}&api_key=${API_KEY}&start_date=${initialDate}&end_date=${endDate}&format=records`).then(response => response.json())
+        },
+        async fetch1Month() {
+            const initialDate = `${calculateDaysAgo(new Date(), 31)}`
+            const endDate = `${formatDate('yyyy-mm-dd')}`
+
+            this.monthHistorical = await fetch(`/api/${endpoint}?currency=${this.getCurrencyPair}&api_key=${API_KEY}&start_date=${initialDate}&end_date=${endDate}&format=records`).then(response => response.json())
+        },
+
+
     },
     getters: {
         getTickHistorical(state) {
@@ -32,14 +59,9 @@ export const useTickHistorical = defineStore('tick-historical', {
         getHistoricalDate(state) {
             return state.tickHistorical.quotes.map(quoteDate => quoteDate.time)
         },
-        getCurrencyPair(state) {
-            return state.tickHistorical.quotes.find(quoteDate => quoteDate.inst)
+        getCurrencyPair() {
+            return useUserActions().getCurrencyPair
         },
-        getUserCurrencyPair() {
-            const liveCurrency = useLiveCurrency()
-            const curencyPair = liveCurrency.getCurrencyPair
-            return curencyPair
-        }
     }
 })
 
