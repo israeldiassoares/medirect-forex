@@ -1,6 +1,6 @@
 import { Chart, type ChartConfiguration } from 'chart.js/auto'
 import { useHistoricalClosePrices } from "@/stores/historicalClosePrices"
-import { useUserActions } from './stores/userActions'
+import { useUserActions } from '../../stores/userActions'
 export function createClosePriceChart() {
     const store = useHistoricalClosePrices()
     const userActionsStore = useUserActions()
@@ -35,6 +35,11 @@ export function createClosePriceChart() {
                     },
                 },
             },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
         }
     }
 
