@@ -2,7 +2,7 @@
     <div class="grid grid-colums-3 justify-center">
         <section class="socket w-15 w-16">
             <!-- TODO NEED TO GET CURRENCY DINAMIcally -->
-            <!-- <WebSocketConnection /> -->
+            <WebSocketConnection />
         </section>
         <section id="compare-exchange">
             <DropDownSelect @change="userActionsStore.setSelectedBaseCurrency($event.target.value)">
