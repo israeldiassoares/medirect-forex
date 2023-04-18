@@ -1,7 +1,7 @@
 <template>
     <div
         class="grid grid-rows-2"
-        v-if="true"
+        v-if="false"
     >
 
         <section id="available-exchange">
@@ -19,7 +19,7 @@
 
             </DropDownSelect>
             <!-- TODO Pass fetchLiveCurrency call to computed when both Base|Quote is fill -->
-            <DropDownSelect @change="[ userActionsStore.setSelectedQuoteCurrency($event.target.value), store.fetchLiveCurrency() ]">
+            <DropDownSelect @change="[ userActionsStore.setSelectedQuoteCurrency($event.target.value) ]">
                 <template v-slot:flag>
 
                     <div
@@ -32,21 +32,29 @@
         </section>
         <section
             id="chart"
-            v-if="plotCharts"
+            v-if="!tickHistorical.getIsLoading"
             class="flex items-center justify-center"
         >
             <section id="live-exchange">
-                <AtomLineChart />
+                <lineChart />
+
+                <!-- <AtomLineChart
+                    :data-to-plot="tickHistorical.getHistoricalQuotes"
+                    context="forex-chart"
+                /> -->
             </section>
             <section id="close-prices">
                 <AtomBarChart />
             </section>
         </section>
     </div>
+    <div class="socket">
+        <!-- <WebSocketConnection /> -->
+    </div>
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onMounted, onUpdated } from "vue"
+import { computed, defineAsyncComponent, onBeforeUpdate, onMounted, onUpdated } from "vue"
 import { useLiveCurrency } from '@/stores/liveCurrency'
 import { useUserActions } from '@/stores/userActions'
 import { useHistoricalClosePrices } from "@/stores/historicalClosePrices"
@@ -67,19 +75,24 @@ const AtomBarChart = defineAsyncComponent({
     loader: () => import("@/components/atoms/AtomBarChart.vue")
 })
 
+const lineChart = defineAsyncComponent({
+    loader: () => import("@/components/molecules/LineChart.vue.js")
+})
+const WebSocketConnection = defineAsyncComponent({
+    loader: () => import("@/components/molecules/MoleculeWebSocket.vue")
+})
+
 const plotCharts = computed(() => {
     return (userActionsStore.getSelectedBaseCurrency.trim().length > 0 &&
         userActionsStore.getSelectedQuoteCurrency.trim().length > 0) ? true : false
 
 })
-const canFetch = async function canfetchLast30Days() {
-    return plotCharts.value ? [ await historicalPrices.fetchLast30Days(), tickHistorical.fetch15Minutes() ] : ''
+const canFetch = function canfetchLast30Days() {
+    return plotCharts.value ? [ historicalPrices.fetchLast30Days(), tickHistorical.fetch15Minutes() ] : ''
 }
 onUpdated(() => {
     canFetch()
 })
 store.fetchListCurrency(true)
-
-
 
 </script>

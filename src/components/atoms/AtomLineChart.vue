@@ -30,8 +30,9 @@
                     </div>
                 </section>
             </section>
+            <canvas id="forex-chart"></canvas>
+
             <section>
-                <canvas id="forex-chart"></canvas>
                 <hr>
                 <section class="flex justify-evenly">
                     <button
@@ -66,31 +67,77 @@
 </template>
 
 <script setup lang="ts">
-import { ExchangePrice } from '@/utils/ChartsBuilder/ExchangePrice.js'
-import { computed, onUpdated } from 'vue'
+// import { ExchangePrice } from '@/utils/ChartsBuilder/ExchangePrice.js'
+import { onMounted } from 'vue'
+import { Chart, type ChartConfiguration, type ChartItem, type ChartTypeRegistry } from 'chart.js/auto'
 import { useLiveCurrency } from '@/stores/liveCurrency'
 import { useTickHistorical } from "@/stores/tickHistorical"
 import { useUserActions } from '@/stores/userActions'
 const store = useLiveCurrency()
 const tickHistoricalStore = useTickHistorical()
 const userActionsStore = useUserActions()
+
+//ChartLine
+const liveCurrencyStore = store
+const tickHistorical = tickHistoricalStore
+const dados = tickHistorical
+
+const props = defineProps([ 'dataToPlot', 'context' ])
+const context = document.getElementById(props.context) as HTMLCanvasElement
+
+const config: ChartConfiguration = {
+    type: 'line',
+    data: {
+        labels: [ dados.getHistoricalDate ],
+        datasets: [
+            {
+                label: `${liveCurrencyStore.getCurrencyPair}`,
+                data: dados.getCurrencyPair//dados.getHistoricalQuotes
+            }
+        ]
+    },
+    options: {
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        fill: true,
+        hoverBackgroundColor: 'green',
+        drawActiveElementsOnTop: true,
+        scales: {
+            x: {
+                display: false
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+}
 function getLast15Minutes() {
     tickHistoricalStore.fetch15Minutes()
-    console.log('call to ep 15 minutes')
 }
+
 function getLast1Hour() {
     tickHistoricalStore.fetch1Hour()
-    console.log('call to ep 1hour')
 }
 function getLast1Day() {
     tickHistoricalStore.fetch1Day()
-    console.log('call to ep 1Day')
-} function getLast1Week() {
-    tickHistoricalStore.fetch1Week()
-    console.log('call to ep 1Week')
-} function getLast1Month() {
-    tickHistoricalStore.fetch1Month()
-    console.log('call to ep 1month')
 }
+function getLast1Week() {
+    tickHistoricalStore.fetch1Week()
+}
+function getLast1Month() {
+    tickHistoricalStore.fetch1Month()
+}
+function createChart(ctx: ChartItem, config: ChartConfiguration<keyof ChartTypeRegistry, (number | [ number, number ] | Point | BubbleDataPoint | null)[], unknown> | ChartConfigurationCustomTypesPerDataset<keyof ChartTypeRegistry, (number | [ number, number ] | Point | BubbleDataPoint | null)[], unknown>) {
+    //interpolation to create chart
+    return new Chart(
+        ctx,
+        config
+    )
+}
+onMounted(() => {
+    createChart(context, config)
+})
 
 </script>
