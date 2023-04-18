@@ -6,7 +6,7 @@
                 value=""
             >Please select one</option>
             <option
-                v-for="(     currency, index        ) in getCurrencyList()"
+                v-for="(       currency, index          ) in getCurrencyList()"
                 :key="index"
                 :id="index"
             >
@@ -24,8 +24,8 @@ const store = useLiveCurrency()
 function getCurrencyList() {
     return store.getStateCurrencyList
 }
+const currencySelected = ref('')
 onMounted(() => {
     getCurrencyList()
 })
-const currencySelected = ref('')
 </script>

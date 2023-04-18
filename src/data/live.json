@@ -1,0 +1,14 @@
+{
+  "endpoint": "live",
+  "quotes": [
+    {
+      "ask": 5.45157,
+      "base_currency": "EUR",
+      "bid": 5.45157,
+      "mid": 5.45157,
+      "quote_currency": "BRL"
+    }
+  ],
+  "requested_time": "Sat, 15 Apr 2023 15:29:51 GMT",
+  "timestamp": 1681572591
+}

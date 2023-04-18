@@ -1,0 +1,19 @@
+
+// 20230415173328 fazer duas chamadas para pegar uma hora inteira
+
+//Pega 15 minutos Lista
+https://marketdata.tradermade.com/api/v1/
+timeseries?currency=EURUSD&api_key=WUDjYatxGAYWpomaK1p1&start_date=2023-04-14-11:38&end_date=2023-04-14-11:53&format=records&interval=minute&period=1
+
+timeseries?currency=AUDBRL&api_key=WUDjYatxGAYWpomaK1p1&start_date=2023-04-1619:22&end_date=2023-04-1619:37&format=records&interval=minute&period=1
+
+
+//Pega 1 Dia
+https://marketdata.tradermade.com/api/v1/timeseries?currency=EURUSD&api_key=WUDjYatxGAYWpomaK1p1&start_date=2023-04-13-17:20&end_date=2023-04-14-17:20&format=records&interval=hourly
+
+//Pegar 1W Semana Lista
+https://marketdata.tradermade.com/api/v1/timeseries?currency=EURUSD&api_key=WUDjYatxGAYWpomaK1p1&start_date=2023-04-09&end_date=2023-04-16&format=records
+
+
+//Pega um mês Lista
+//  https://marketdata.tradermade.com/api/v1/timeseries?currency=EURUSD&api_key=WUDjYatxGAYWpomaK1p1&start_date=2023-03-01&end_date=2023-03-31&format=records
